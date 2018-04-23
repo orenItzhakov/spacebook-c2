@@ -1,0 +1,45 @@
+.comment_time{
+  color: #5cb85c;
+  font-style: italic;
+  margin-left: 15px;
+  font-size: 14px;
+}
+.comments i{
+  margin-left: 10px;
+  font-size: 15px;
+  cursor: pointer;
+}
+.comments i:hover{
+  opacity: 0.9;
+}
+.inside{
+  padding-bottom: 15px;
+  border-bottom: 1px solid #acacac;
+  display: none;
+  margin-bottom: 10px;
+}
+.post{
+  font-size: 21px;
+  font-weight: bold;
+}
+.comments p{
+  font-size: 15px;
+}
+.comments h2{
+  font-size: 25px;
+}
+
+.specific{
+  display: none;
+}
+.post .btn{
+  font-size: 11px;
+  float: right;
+  margin-left: 5px;
+}
+.backToPosts{
+  float: right;
+}
+.specific h3{
+  font-weight: bold;
+}

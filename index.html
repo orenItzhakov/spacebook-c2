@@ -2,30 +2,36 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="style.css">
   <title></title>
 </head>
 <body>
-  <div class="row">
-    <div class="col-md-6 col-md-offset-3">
-      <div class="page-header">
-        <h1>Spacebook</h1>
-      </div>
-
-      <div class="posts">
-      </div>
-
-      <form>
-        <h3>Add a New Post</h3>
-
-        <div class="form-group">
-          <input type="text" id="post-name" class="form-control" placeholder="Post Text">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <div class="page-header">
+          <h1>Spacebook</h1>
         </div>
+        <div class="all">
+          <div class="posts">
+          </div>
+          <form style="margin-top:40px;">
+            <h3>Add a New Post</h3>
 
-        <button class="btn btn-primary add-post" type="button">Post</button>
-      </form>
+            <div class="form-group">
+              <input type="text" id="post-name" class="form-control" placeholder="Post Text">
+            </div>
+
+            <button class="btn btn-primary add-post" type="button">Post</button>
+          </form>
+        </div>
+        <div class="specific"></div>
+      </div>
     </div>
   </div>
+
+
   <script
   src="https://code.jquery.com/jquery-3.3.1.js"
   integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
