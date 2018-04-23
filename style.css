@@ -5,3 +5,17 @@
 .show {
   display: block;
 }
+
+.comments {
+  margin-left: 30px;
+}
+
+.btn-primary {
+  margin-left: 10px;
+  font-size: 11px;
+  padding: 0 13px;
+  height: 26px;
+}
+.remove , .remove_comment{
+  color: red;
+}
