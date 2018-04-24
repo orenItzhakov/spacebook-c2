@@ -1,24 +1,8 @@
 var SpacebookApp = function () {
-  var posts = [
-    {text: "Hello world 1", id: 0, comments:[
-      { text: "Man, this is a comment1!"},
-      { text: "Man, this is a comment2!"},
-      { text: "Man, this is a comment3!"}
-    ]},
-    {text: "Hello world 2", id: 1, comments:[
-      { text: "Man, this is a comment4!"},
-      { text: "Man, this is a comment5!"},
-      { text: "Man, this is a comment6!"}
-    ]},
-    {text: "Hello world 3", id: 2, comments:[
-      { text: "Man, this is a comment7!"},
-      { text: "Man, this is a comment8!"},
-      { text: "Man, this is a comment9!"}
-    ]}
-  ];
+  var posts = [];
 
   // the current id to assign to a post
-  var currentId = 3;
+  var currentId = 0;
   var $posts = $('.posts');
 
   var _findPostById = function (id) {
@@ -88,16 +72,14 @@ var SpacebookApp = function () {
     var $comment = $(currentComment).closest('.comment');
     var id = $fatherPost.data().id;
     var idComment = $comment.data().comment_id;
-
     var post = _findPostById(id);
 
-    if(posts[id].comments.length == 1) {
-      posts[id].comments = [];
+    if(post.comments.length == 1) {
+      post.comments = [];
     }
-    else posts[id].comments.splice(idComment, 1);
+    else post.comments.splice(idComment, 1);
 
     $(currentComment).parent().remove();
-    console.log(posts[0].comments);
   }
 
   var toggleComments = function (currentPost) {
