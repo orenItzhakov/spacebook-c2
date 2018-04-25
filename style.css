@@ -7,7 +7,21 @@
 }
 
 .comments {
-  margin-left: 30px;
+  padding: 10px;
+}
+
+.comment {
+  margin-top: 10px;
+  padding-bottom: 4px;
+  padding-left: 4px;
+  border-bottom: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+}
+
+.post {
+  padding: 10px;
+  border: 1px solid #ddd;
+  margin-bottom: 7px;
 }
 
 .btn-primary {
@@ -16,6 +30,43 @@
   padding: 0 13px;
   height: 26px;
 }
-.remove , .remove_comment{
-  color: red;
+
+.remove,.show_comments,.edit_post,.save_comment,.save_post,.remove_comment,.edit_comment{
+  opacity: 0.4;
+  font-size: 17px;
+  margin-left: 8px;
+  transition: 0.5s;
+  vertical-align: sub;
+  cursor: pointer;
 }
+
+.remove:hover,.show_comments:hover,.edit_post:hover,.save_post:hover,.save_comment:hover,.remove_comment:hover,.edit_comment:hover{
+  opacity: 1;
+}
+
+.remove,.remove_comment{
+  font-size: 18px;
+  color: #d31919;
+}
+
+.show_comments{
+  color: #2f74d3;
+}
+
+.edit_post,.edit_comment{
+  color: #26ab29;
+}
+
+.buttons,.button_comments{
+  float: right;
+}
+
+.post_text{
+  font-size: 18px;
+  font-style: italic;
+  margin-right: 15px;
+}
+ .comment-name{
+  margin-left: 10px;
+  margin-top: 10px;
+ }

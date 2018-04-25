@@ -19,10 +19,9 @@ var SpacebookApp = function () {
       id: currentId,
       comments : new Array()
     }
-
     currentId += 1;
-
     posts.push(post);
+    $('#post-name').val("");
   }
 
   var renderPosts = function () {
@@ -32,12 +31,42 @@ var SpacebookApp = function () {
 
       var commentsContainer = '<div class="comments-container">' +
       '<input type="text" class="comment-name">' +
-      '<button class="btn btn-primary add-comment">Post Comment</button> <div class="comments"></div> </div>';
+      '<button class="btn btn-primary add_comment">Post Comment</button> <div class="comments"></div> </div>';
 
-      $posts.append('<div class="post" data-id=' + post.id + '>'
-        + '<a href="#" class="remove">remove</a> ' + '<a href="#" class="show-comments">comments</a> ' + post.text +
-        commentsContainer + '</div>');
+      $posts.append(
+        '<div class="post" data-id=' + post.id + '>'
+        + '<div class="buttons"><i class="material-icons edit_post" title="Edit post">create</i>'
+        + '<i class="material-icons show_comments" title="Show comments">comment</i>'
+        + '<i class="material-icons remove" title="Remove post">delete</i></div>'
+        + '<span class="post_text">' + post.text + '</span>'
+        + commentsContainer + '</div>');
     }
+  }
+
+  var editPost = function (currentPost) {
+    var $post = $(currentPost).closest('.post');
+    var text = $post.find(".post_text").text();
+    $post.find(".buttons").hide();
+    $post.find(".post_text").replaceWith("<input class='post_val' type='text' value='" + text + "'><i class='material-icons save_post' title='Save post'>save</i>");
+  }
+
+  var savePost = function (currentPost) {
+    var $post = $(currentPost).closest('.post');
+    var id = $post.data().id;
+    var new_text = $post.find(".post_val").val();
+    var post = _findPostById(id);
+    post.text = new_text;
+  }
+
+  var saveComment = function (currentComment) {
+    var $post = $(currentComment).closest('.post');
+    var id = $post.data().id;
+    var $comment = $(currentComment).closest('.comment');
+    var idComment = $comment.data().comment_id;
+
+    var new_text = $post.find(".comment_val").val();
+    var post = _findPostById(id);
+    post.comments[idComment].text = new_text;
   }
 
   var removePost = function (currentPost) {
@@ -53,18 +82,30 @@ var SpacebookApp = function () {
     var id = $(current).closest('.post').data().id;
     var post = _findPostById(id);
     post.comments.push( {text : text} );
+    $(current).parent().find('.comment-name').val("");
   }
 
   var renderComments = function (currentPost) {
-    var id = $(currentPost).closest('.post').data().id;
-    var $comments = $(currentPost).parent().find(".comments");
+    var $post = $(currentPost).closest('.post');
+    var id = $post.data().id;
+    var $comments = $post.find(".comments");
     $comments.empty();
     var post = _findPostById(id);
     for (var i = 0; i < post.comments.length ; i += 1) {
       var comment = post.comments[i];
       $comments.append('<div class="comment" data-comment_id='+i+'>'
-        + '<a href="#" class="remove_comment">remove</a> ' + comment.text + '</div>');
+        + '<div class="button_comments"><i class="material-icons remove_comment" title="Remove comment">delete</i>'
+        + '<i class="material-icons edit_comment" title="Edit comment">create</i></div>'
+        + '&#9658;<span class="comment_text"> ' + comment.text + '</span>'
+        + '</div>');
     }
+  }
+
+  var editComment = function (currentPost) {
+    var $comment = $(currentPost).closest('.comment');
+    var text = $comment.find(".comment_text").text();
+    $comment.find(".button_comments").hide();
+    $comment.find(".comment_text").replaceWith("<input class='comment_val' type='text' value='" + text + "'><i class='material-icons save_comment' title='Save comment'>save</i>");
   }
 
   var removeComment = function (currentComment) {
@@ -78,8 +119,6 @@ var SpacebookApp = function () {
       post.comments = [];
     }
     else post.comments.splice(idComment, 1);
-
-    $(currentComment).parent().remove();
   }
 
   var toggleComments = function (currentPost) {
@@ -90,10 +129,14 @@ var SpacebookApp = function () {
   return {
     createPost: createPost,
     renderPosts: renderPosts,
+    editPost: editPost,
+    savePost: savePost,
     removePost: removePost,
     createComment: createComment,
     renderComments: renderComments,
     removeComment: removeComment,
+    saveComment: saveComment,
+    editComment: editComment,
     toggleComments: toggleComments
   }
 }
@@ -114,16 +157,35 @@ $('.posts').on('click', '.remove', function () {
   app.removePost(this);
 });
 
-$('.posts').on('click','.show-comments', function () {
+$('.posts').on('click', '.edit_post', function () {
+  app.editPost(this);
+});
+
+$('.posts').on('click', '.save_post', function () {
+  app.savePost(this);
+  app.renderPosts();
+});
+
+$('.posts').on('click', '.save_comment', function () {
+  app.saveComment(this);
+  app.renderComments(this);
+});
+
+$('.posts').on('click','.show_comments', function () {
   app.toggleComments(this);
   app.renderComments(this);
 });
 
-$('.posts').on('click','.add-comment', function () {
+$('.posts').on('click','.add_comment', function () {
   app.createComment(this);
   app.renderComments(this);
 });
 
-$('.posts').on('click', '.remove_comment', function () {
+$('.posts').on('click','.remove_comment', function () {
   app.removeComment(this);
+  app.renderComments(this);
+});
+
+$('.posts').on('click','.edit_comment' , function(){
+  app.editComment(this);
 });
