@@ -4,30 +4,59 @@
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.4/handlebars.js"></script>
   <title></title>
 </head>
 <body>
   <div class="row">
-    <div class="col-md-6 col-md-offset-3">
+    <div class="col-md-6 col-md-offset-3 boxit">
       <div class="page-header">
         <h1>Spacebook</h1>
       </div>
 
-      <div class="posts">
-      </div>
+      <div class="posts"></div>
 
       <form>
         <h3>Add a New Post</h3>
-
         <div class="form-group">
           <input type="text" id="post-name" class="form-control" placeholder="Post Text">
         </div>
-
-        <button class="btn btn-primary add-post" type="button">Post</button>
+        <button class="btn btn-primary add_post" type="button">Post</button>
       </form>
 
     </div>
   </div>
+
+  <script id="store-template-posts" type="text/x-handlebars-template">
+    {{#each posts}}
+      <div class="post" data-id="{{id}}">
+        <div class="buttons">
+          <i class="material-icons edit_post" title="Edit post">create</i>
+          <i class="material-icons show_comments" title="Show comments">comment</i>
+          <i class="material-icons remove" title="Remove post">delete</i>
+        </div>
+        <span class="post_text">{{text}}</span>
+        <div class="comments-container">
+          <input type="text" class="comment-name">
+          <button class="btn btn-primary add_comment">Post Comment</button>
+          <div class="comments"></div>
+        </div>
+      </div>
+    {{/each}}
+  </script>
+
+  <script id="store-template-comments" type="text/x-handlebars-template">
+    {{#each comments}}
+      <div class="comment" data-comment_id="{{@index}}">
+        <div class="button_comments">
+          <i class="material-icons remove_comment" title="Remove comment">delete</i>
+          <i class="material-icons edit_comment" title="Edit comment">create</i>
+        </div>
+        &#9658; <span class="comment_text">{{text}}</span>
+      </div>
+    {{/each}}
+  </script>
+  
   <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
   <script src="main.js"></script>
 </body>

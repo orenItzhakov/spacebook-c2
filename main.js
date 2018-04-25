@@ -26,21 +26,10 @@ var SpacebookApp = function () {
 
   var renderPosts = function () {
     $posts.empty();
-    for (var i = 0; i < posts.length; i += 1) {
-      var post = posts[i];
-
-      var commentsContainer = '<div class="comments-container">' +
-      '<input type="text" class="comment-name">' +
-      '<button class="btn btn-primary add_comment">Post Comment</button> <div class="comments"></div> </div>';
-
-      $posts.append(
-        '<div class="post" data-id=' + post.id + '>'
-        + '<div class="buttons"><i class="material-icons edit_post" title="Edit post">create</i>'
-        + '<i class="material-icons show_comments" title="Show comments">comment</i>'
-        + '<i class="material-icons remove" title="Remove post">delete</i></div>'
-        + '<span class="post_text">' + post.text + '</span>'
-        + commentsContainer + '</div>');
-    }
+    var source = $('#store-template-posts').html();
+    var template = Handlebars.compile(source);
+    var newHTML = template({posts : posts});
+    $('.posts').append(newHTML);
   }
 
   var editPost = function (currentPost) {
@@ -79,10 +68,13 @@ var SpacebookApp = function () {
 
   var createComment = function (current) {
     var text = $(current).parent().find('.comment-name').val();
-    var id = $(current).closest('.post').data().id;
-    var post = _findPostById(id);
-    post.comments.push( {text : text} );
-    $(current).parent().find('.comment-name').val("");
+    if(text != ""){
+      var id = $(current).closest('.post').data().id;
+      var post = _findPostById(id);
+      post.comments.push( {text : text} );
+      $(current).parent().find('.comment-name').val("");
+    }
+    else alert("Input field is empty! please enter a comment");
   }
 
   var renderComments = function (currentPost) {
@@ -91,14 +83,11 @@ var SpacebookApp = function () {
     var $comments = $post.find(".comments");
     $comments.empty();
     var post = _findPostById(id);
-    for (var i = 0; i < post.comments.length ; i += 1) {
-      var comment = post.comments[i];
-      $comments.append('<div class="comment" data-comment_id='+i+'>'
-        + '<div class="button_comments"><i class="material-icons remove_comment" title="Remove comment">delete</i>'
-        + '<i class="material-icons edit_comment" title="Edit comment">create</i></div>'
-        + '&#9658;<span class="comment_text"> ' + comment.text + '</span>'
-        + '</div>');
-    }
+
+    var source = $('#store-template-comments').html();
+    var template = Handlebars.compile(source);
+    var newHTML = template({comments : post.comments});
+    $comments.append(newHTML);
   }
 
   var editComment = function (currentPost) {
@@ -147,10 +136,13 @@ var app = SpacebookApp();
 app.renderPosts();
 
 // Events
-$('.add-post').on('click', function () {
+$('.add_post').on('click', function () {
   var text = $('#post-name').val();
-  app.createPost(text);
-  app.renderPosts();
+  if(text != ""){
+    app.createPost(text);
+    app.renderPosts();
+  }
+  else alert("Input field is empty! please enter a post");
 });
 
 $('.posts').on('click', '.remove', function () {
