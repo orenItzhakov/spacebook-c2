@@ -3,7 +3,6 @@ var SpacebookApp = function () {
 
   // the current id to assign to a post
   var currentId = 0;
-  var $posts = $('.posts');
 
   var _findPostById = function (id) {
     for (var i = 0; i < posts.length; i += 1) {
@@ -17,6 +16,7 @@ var SpacebookApp = function () {
     var post = {
       text: text,
       id: currentId,
+      isOpen : false,
       comments : new Array()
     }
     currentId += 1;
@@ -25,7 +25,7 @@ var SpacebookApp = function () {
   }
 
   var renderPosts = function () {
-    $posts.empty();
+    $('.posts').empty();
     var source = $('#store-template-posts').html();
     var template = Handlebars.compile(source);
     var newHTML = template({posts : posts});
@@ -63,7 +63,6 @@ var SpacebookApp = function () {
     var id = $clickedPost.data().id;
     var post = _findPostById(id);
     posts.splice(posts.indexOf(post), 1);
-    $clickedPost.remove();
   }
 
   var createComment = function (current) {
@@ -75,19 +74,6 @@ var SpacebookApp = function () {
       $(current).parent().find('.comment-name').val("");
     }
     else alert("Input field is empty! please enter a comment");
-  }
-
-  var renderComments = function (currentPost) {
-    var $post = $(currentPost).closest('.post');
-    var id = $post.data().id;
-    var $comments = $post.find(".comments");
-    $comments.empty();
-    var post = _findPostById(id);
-
-    var source = $('#store-template-comments').html();
-    var template = Handlebars.compile(source);
-    var newHTML = template({comments : post.comments});
-    $comments.append(newHTML);
   }
 
   var editComment = function (currentPost) {
@@ -112,6 +98,9 @@ var SpacebookApp = function () {
 
   var toggleComments = function (currentPost) {
     var $clickedPost = $(currentPost).closest('.post');
+    var id = $clickedPost.data().id;
+    var post = _findPostById(id);
+    post.isOpen = !post.isOpen;
     $clickedPost.find('.comments-container').toggleClass('show');
   }
 
@@ -122,7 +111,6 @@ var SpacebookApp = function () {
     savePost: savePost,
     removePost: removePost,
     createComment: createComment,
-    renderComments: renderComments,
     removeComment: removeComment,
     saveComment: saveComment,
     editComment: editComment,
@@ -147,6 +135,7 @@ $('.add_post').on('click', function () {
 
 $('.posts').on('click', '.remove', function () {
   app.removePost(this);
+  app.renderPosts();
 });
 
 $('.posts').on('click', '.edit_post', function () {
@@ -160,22 +149,21 @@ $('.posts').on('click', '.save_post', function () {
 
 $('.posts').on('click', '.save_comment', function () {
   app.saveComment(this);
-  app.renderComments(this);
+  app.renderPosts();
 });
 
 $('.posts').on('click','.show_comments', function () {
   app.toggleComments(this);
-  app.renderComments(this);
 });
 
 $('.posts').on('click','.add_comment', function () {
   app.createComment(this);
-  app.renderComments(this);
+  app.renderPosts();
 });
 
 $('.posts').on('click','.remove_comment', function () {
   app.removeComment(this);
-  app.renderComments(this);
+  app.renderPosts();
 });
 
 $('.posts').on('click','.edit_comment' , function(){

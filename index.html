@@ -36,27 +36,25 @@
           <i class="material-icons remove" title="Remove post">delete</i>
         </div>
         <span class="post_text">{{text}}</span>
-        <div class="comments-container">
+        <div class="comments-container {{#if isOpen}}show{{/if}}">
           <input type="text" class="comment-name">
           <button class="btn btn-primary add_comment">Post Comment</button>
-          <div class="comments"></div>
+          <div class="comments">
+            {{#each comments}}
+              <div class="comment" data-comment_id="{{@index}}">
+                <div class="button_comments">
+                  <i class="material-icons remove_comment" title="Remove comment">delete</i>
+                  <i class="material-icons edit_comment" title="Edit comment">create</i>
+                </div>
+                &#9658; <span class="comment_text">{{text}}</span>
+              </div>
+            {{/each}}
+          </div>
         </div>
       </div>
     {{/each}}
   </script>
 
-  <script id="store-template-comments" type="text/x-handlebars-template">
-    {{#each comments}}
-      <div class="comment" data-comment_id="{{@index}}">
-        <div class="button_comments">
-          <i class="material-icons remove_comment" title="Remove comment">delete</i>
-          <i class="material-icons edit_comment" title="Edit comment">create</i>
-        </div>
-        &#9658; <span class="comment_text">{{text}}</span>
-      </div>
-    {{/each}}
-  </script>
-  
   <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
   <script src="main.js"></script>
 </body>
