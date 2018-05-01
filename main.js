@@ -1,6 +1,5 @@
 var SpacebookApp = function () {
-  var posts = [];
-
+  var STORAGE_ID = 'spacebook';
   // the current id to assign to a post
   var currentId = 0;
 
@@ -21,7 +20,6 @@ var SpacebookApp = function () {
     }
     currentId += 1;
     posts.push(post);
-    $('#post-name').val("");
   }
 
   var renderPosts = function () {
@@ -30,6 +28,7 @@ var SpacebookApp = function () {
     var template = Handlebars.compile(source);
     var newHTML = template({posts : posts});
     $('.posts').append(newHTML);
+    saveToLocalStorage();
   }
 
   var editPost = function (currentPost) {
@@ -39,41 +38,24 @@ var SpacebookApp = function () {
     $post.find(".post_text").replaceWith("<input class='post_val' type='text' value='" + text + "'><i class='material-icons save_post' title='Save post'>save</i>");
   }
 
-  var savePost = function (currentPost) {
-    var $post = $(currentPost).closest('.post');
-    var id = $post.data().id;
-    var new_text = $post.find(".post_val").val();
+  var savePost = function (id , text) {
     var post = _findPostById(id);
-    post.text = new_text;
+    post.text = text;
   }
 
-  var saveComment = function (currentComment) {
-    var $post = $(currentComment).closest('.post');
-    var id = $post.data().id;
-    var $comment = $(currentComment).closest('.comment');
-    var idComment = $comment.data().comment_id;
-
-    var new_text = $post.find(".comment_val").val();
+  var saveComment = function (id , idComment , text) {
     var post = _findPostById(id);
-    post.comments[idComment].text = new_text;
+    post.comments[idComment].text = text;
   }
 
-  var removePost = function (currentPost) {
-    var $clickedPost = $(currentPost).closest('.post');
-    var id = $clickedPost.data().id;
+  var removePost = function (id) {
     var post = _findPostById(id);
     posts.splice(posts.indexOf(post), 1);
   }
 
-  var createComment = function (current) {
-    var text = $(current).parent().find('.comment-name').val();
-    if(text != ""){
-      var id = $(current).closest('.post').data().id;
-      var post = _findPostById(id);
-      post.comments.push( {text : text} );
-      $(current).parent().find('.comment-name').val("");
-    }
-    else alert("Input field is empty! please enter a comment");
+  var createComment = function (id , text) {
+    var post = _findPostById(id);
+    post.comments.push( {text : text} );
   }
 
   var editComment = function (currentPost) {
@@ -83,27 +65,29 @@ var SpacebookApp = function () {
     $comment.find(".comment_text").replaceWith("<input class='comment_val' type='text' value='" + text + "'><i class='material-icons save_comment' title='Save comment'>save</i>");
   }
 
-  var removeComment = function (currentComment) {
-    var $fatherPost = $(currentComment).closest('.post');
-    var $comment = $(currentComment).closest('.comment');
-    var id = $fatherPost.data().id;
-    var idComment = $comment.data().comment_id;
+  var removeComment = function (id , idComment) {
     var post = _findPostById(id);
-
     if(post.comments.length == 1) {
       post.comments = [];
     }
     else post.comments.splice(idComment, 1);
   }
 
-  var toggleComments = function (currentPost) {
-    var $clickedPost = $(currentPost).closest('.post');
-    var id = $clickedPost.data().id;
+  var toggleComments = function (id) {
     var post = _findPostById(id);
     post.isOpen = !post.isOpen;
-    $clickedPost.find('.comments-container').toggleClass('show');
   }
 
+  var saveToLocalStorage = function () {
+    localStorage.setItem(STORAGE_ID, JSON.stringify(posts));
+  }
+
+  var getFromLocalStorage = function () {
+    return JSON.parse(localStorage.getItem(STORAGE_ID) || '[]');
+  }
+
+  var posts = getFromLocalStorage();
+  
   return {
     createPost: createPost,
     renderPosts: renderPosts,
@@ -129,12 +113,14 @@ $('.add_post').on('click', function () {
   if(text != ""){
     app.createPost(text);
     app.renderPosts();
+    $('#post-name').val("");
   }
   else alert("Input field is empty! please enter a post");
 });
 
 $('.posts').on('click', '.remove', function () {
-  app.removePost(this);
+  var id = $(this).closest('.post').data().id;
+  app.removePost(id);
   app.renderPosts();
 });
 
@@ -143,26 +129,45 @@ $('.posts').on('click', '.edit_post', function () {
 });
 
 $('.posts').on('click', '.save_post', function () {
-  app.savePost(this);
+  var $post = $(this).closest('.post');
+  var id = $post.data().id;
+  var text = $post.find(".post_val").val();
+  app.savePost(id , text);
   app.renderPosts();
 });
 
 $('.posts').on('click', '.save_comment', function () {
-  app.saveComment(this);
+  var $post = $(this).closest('.post');
+  var id = $post.data().id;
+  var $comment = $(this).closest('.comment');
+  var idComment = $comment.data().comment_id;
+  var text = $post.find(".comment_val").val();
+  app.saveComment(id , idComment , text);
   app.renderPosts();
 });
 
 $('.posts').on('click','.show_comments', function () {
-  app.toggleComments(this);
+  var $post = $(this).closest('.post');
+  var id = $post.data().id;
+  app.toggleComments(id);
+  $post.find('.comments-container').toggleClass('show');
 });
 
 $('.posts').on('click','.add_comment', function () {
-  app.createComment(this);
-  app.renderPosts();
+  var text = $(this).parent().find('.comment-name').val();
+  if(text != ""){
+    var id = $(this).closest('.post').data().id;
+    app.createComment(id , text);
+    app.renderPosts();
+    $(this).parent().find('.comment-name').val("");
+  }
+  else alert("Input field is empty! please enter a comment");
 });
 
 $('.posts').on('click','.remove_comment', function () {
-  app.removeComment(this);
+  var id = $(this).closest('.post').data().id;
+  var idComment = $(this).closest('.comment').data().comment_id;
+  app.removeComment(id , idComment);
   app.renderPosts();
 });
 
