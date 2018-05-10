@@ -87,7 +87,7 @@ var SpacebookApp = function () {
   }
 
   var posts = getFromLocalStorage();
-  
+
   return {
     createPost: createPost,
     renderPosts: renderPosts,

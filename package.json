@@ -1,0 +1,26 @@
+{
+  "name": "spacebook-c2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/orenItzhakov/spacebook-c2.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/orenItzhakov/spacebook-c2/issues"
+  },
+  "homepage": "https://github.com/orenItzhakov/spacebook-c2#readme",
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "express": "^4.16.3",
+    "handlebars": "^4.0.11",
+    "jquery": "^3.3.1"
+  }
+}
